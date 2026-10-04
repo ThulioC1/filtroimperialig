@@ -71,8 +71,8 @@
             const constraints = {
                 video: {
                     facingMode: facingMode,
-                    width: { ideal: 4096 },
-                    height: { ideal: 2160 }
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
                 },
                 audio: false
             };
@@ -277,6 +277,20 @@
     // ── Permission Button ──
     btnAllowCamera.addEventListener('click', () => {
         startCamera(currentFacingMode);
+    });
+
+    // ── Handle Visibility Change ──
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+        } else if (document.visibilityState === 'visible') {
+            if (permissionPrompt.classList.contains('hidden')) {
+                startCamera(currentFacingMode);
+            }
+        }
     });
 
     // ── Auto-start if permissions already granted ──

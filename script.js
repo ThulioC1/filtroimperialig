@@ -106,37 +106,34 @@
         flashOverlay.classList.add('flash');
         setTimeout(() => flashOverlay.classList.remove('flash'), 400);
 
-        // Get the display (container) dimensions for portrait output
-        const container = document.getElementById('filter-container');
-        const displayW = container.clientWidth;
-        const displayH = container.clientHeight;
-        const displayAspect = displayW / displayH;
-
         // Native video dimensions
         const vw = video.videoWidth;
         const vh = video.videoHeight;
         const videoAspect = vw / vh;
 
-        // Calculate crop region to simulate object-fit: cover in portrait
+        // Use standard 9:16 portrait aspect ratio (Instagram Stories)
+        const targetAspect = 9 / 16;
+
+        // Calculate crop region to fit video into 9:16 portrait
         let sx, sy, sw, sh;
-        if (videoAspect > displayAspect) {
-            // Video is wider than display — crop sides
+
+        if (videoAspect <= targetAspect) {
+            // Video is already portrait enough — use full width, crop height
+            sw = vw;
+            sh = vw / targetAspect;
+            sx = 0;
+            sy = Math.max(0, (vh - sh) / 2);
+        } else {
+            // Video is wider (landscape) — crop sides to fit 9:16
             sh = vh;
-            sw = vh * displayAspect;
+            sw = vh * targetAspect;
             sx = (vw - sw) / 2;
             sy = 0;
-        } else {
-            // Video is taller than display — crop top/bottom
-            sw = vw;
-            sh = vw / displayAspect;
-            sx = 0;
-            sy = (vh - sh) / 2;
         }
 
-        // Set canvas to portrait dimensions (use high-res output)
-        const outputScale = Math.min(2, vw / sw); // up to 2x for quality
-        const canvasW = Math.round(sw * outputScale);
-        const canvasH = Math.round(sh * outputScale);
+        // Set canvas to portrait 1080x1920 (standard HD)
+        const canvasW = 1080;
+        const canvasH = 1920;
         canvas.width = canvasW;
         canvas.height = canvasH;
 

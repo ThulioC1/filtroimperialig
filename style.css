@@ -1,0 +1,521 @@
+/* ============================================
+   Império Clinic - Instagram Filter Styles
+   ============================================ */
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Outfit', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+/* ============================================
+   Container
+   ============================================ */
+#filter-container {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    max-width: 500px;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #000;
+}
+
+/* ============================================
+   Camera Feed
+   ============================================ */
+#camera-feed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* ============================================
+   Capture Canvas (hidden)
+   ============================================ */
+#capture-canvas {
+    display: none;
+}
+
+/* ============================================
+   Overlay
+   ============================================ */
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+}
+
+/* ============================================
+   Logo Area (Top)
+   ============================================ */
+#logo-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 30px 20px;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(0, 0, 0, 0.2) 60%,
+        transparent 100%
+    );
+}
+
+#logo-img {
+    width: 180px;
+    height: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+    animation: logoFadeIn 1s ease-out;
+}
+
+@keyframes logoFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ============================================
+   DateTime Area (Bottom)
+   ============================================ */
+#datetime-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 30px 130px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0.25) 50%,
+        transparent 100%
+    );
+    animation: datetimeFadeIn 1.2s ease-out 0.3s both;
+}
+
+@keyframes datetimeFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#date-text {
+    font-size: 15px;
+    font-weight: 400;
+    color: #d4a44a;
+    letter-spacing: 2px;
+    text-transform: capitalize;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+    margin-bottom: 2px;
+}
+
+#time-text {
+    font-size: 52px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 3px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    line-height: 1;
+}
+
+/* Filter Name Badge ("Sua Vez") */
+#filter-name {
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 18px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    animation: badgePulse 3s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+/* ============================================
+   Controls Bar
+   ============================================ */
+#controls-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    padding: 0 30px;
+    animation: controlsFadeIn 1s ease-out 0.6s both;
+}
+
+@keyframes controlsFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#controls-bar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#controls-bar button:active {
+    transform: scale(0.9);
+}
+
+#controls-bar button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+#controls-bar button:disabled:active {
+    transform: none;
+}
+
+/* Flip & Download buttons */
+#btn-flip,
+#btn-download {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#btn-flip svg,
+#btn-download svg {
+    width: 22px;
+    height: 22px;
+}
+
+#btn-flip:hover,
+#btn-download:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Capture Button */
+#btn-capture {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#capture-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+#capture-inner {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.15s ease;
+}
+
+#btn-capture:hover #capture-ring {
+    border-color: #d4a44a;
+}
+
+#btn-capture:hover #capture-inner {
+    background: #d4a44a;
+}
+
+#btn-capture:active #capture-inner {
+    transform: scale(0.85);
+    background: #c49a40;
+}
+
+/* ============================================
+   Flash Overlay
+   ============================================ */
+#flash-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#flash-overlay.flash {
+    animation: flashAnim 0.35s ease-out;
+}
+
+@keyframes flashAnim {
+    0% { opacity: 0.9; }
+    100% { opacity: 0; }
+}
+
+/* ============================================
+   Preview Modal
+   ============================================ */
+#preview-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.92);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: modalIn 0.3s ease-out;
+}
+
+#preview-modal.hidden {
+    display: none;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#preview-img {
+    max-width: 100%;
+    max-height: 75vh;
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+#preview-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.preview-btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.5px;
+}
+
+.preview-btn:active {
+    transform: scale(0.95);
+}
+
+#btn-preview-close {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    backdrop-filter: blur(6px);
+}
+
+#btn-preview-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#btn-preview-download {
+    background: linear-gradient(135deg, #d4a44a, #b8872e);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(212, 164, 74, 0.35);
+}
+
+#btn-preview-download:hover {
+    box-shadow: 0 4px 28px rgba(212, 164, 74, 0.5);
+    transform: translateY(-1px);
+}
+
+/* ============================================
+   Permission Prompt
+   ============================================ */
+#permission-prompt {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 30;
+    background: linear-gradient(160deg, #0d0d0d, #1a1a1a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+#permission-prompt.hidden {
+    display: none;
+}
+
+#permission-card {
+    text-align: center;
+    max-width: 320px;
+    animation: cardIn 0.6s ease-out;
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.permission-logo {
+    width: 200px;
+    height: auto;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 2px 12px rgba(212, 164, 74, 0.3));
+}
+
+#permission-card h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+#permission-card p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+#btn-allow-camera {
+    padding: 14px 40px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #d4a44a, #b8872e);
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 24px rgba(212, 164, 74, 0.35);
+    transition: all 0.3s ease;
+}
+
+#btn-allow-camera:hover {
+    box-shadow: 0 6px 32px rgba(212, 164, 74, 0.5);
+    transform: translateY(-2px);
+}
+
+#btn-allow-camera:active {
+    transform: translateY(0) scale(0.97);
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+@media (min-width: 500px) {
+    #filter-container {
+        border-radius: 24px;
+        margin-top: 20px;
+        height: calc(100dvh - 40px);
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+    }
+}
+
+@media (max-height: 600px) {
+    #logo-img {
+        width: 130px;
+    }
+
+    #logo-area {
+        padding: 30px 20px 10px;
+    }
+
+    #datetime-area {
+        padding: 15px 20px 100px;
+    }
+
+    #time-text {
+        font-size: 40px;
+    }
+
+    #date-text {
+        font-size: 13px;
+    }
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Sua Vez - Império Clinic</title>
+    <meta name="description" content="Sua Vez - Filtro de câmera Império Clinic com data e hora em tempo real">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="filter-container">
+        <!-- Camera feed -->
+        <video id="camera-feed" autoplay playsinline muted></video>
+
+        <!-- Canvas for capture -->
+        <canvas id="capture-canvas"></canvas>
+
+        <!-- Overlay elements -->
+        <div id="overlay">
+            <!-- Logo at the top -->
+            <div id="logo-area">
+                <img src="img/Logo Imperio - Dourado.png" alt="Império Clinic" id="logo-img">
+            </div>
+
+            <!-- Date and Time at the bottom -->
+            <div id="datetime-area">
+                <div id="date-text"></div>
+                <div id="time-text"></div>
+                <div id="filter-name">Sua Vez</div>
+            </div>
+        </div>
+
+        <!-- Controls bar -->
+        <div id="controls-bar">
+            <button id="btn-flip" title="Virar câmera" aria-label="Virar câmera">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
+                </svg>
+            </button>
+            <button id="btn-capture" title="Capturar foto" aria-label="Capturar foto">
+                <div id="capture-ring">
+                    <div id="capture-inner"></div>
+                </div>
+            </button>
+            <button id="btn-download" title="Baixar foto" aria-label="Baixar foto" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Flash overlay -->
+        <div id="flash-overlay"></div>
+
+        <!-- Preview modal -->
+        <div id="preview-modal" class="hidden">
+            <img id="preview-img" alt="Foto capturada">
+            <div id="preview-actions">
+                <button id="btn-preview-close" class="preview-btn">✕ Fechar</button>
+                <button id="btn-preview-download" class="preview-btn primary">⬇ Salvar</button>
+            </div>
+        </div>
+
+        <!-- Permission prompt -->
+        <div id="permission-prompt">
+            <div id="permission-card">
+                <img src="img/Logo Imperio - Dourado.png" alt="Império Clinic" class="permission-logo">
+                <h2>Sua Vez</h2>
+                <p>Permita o acesso à câmera para usar o filtro Império Clinic com data e hora em tempo real.</p>
+                <button id="btn-allow-camera">Ativar Câmera</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

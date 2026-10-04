@@ -88,7 +88,7 @@ html, body {
 }
 
 #logo-img {
-    width: 180px;
+    width: 240px;
     height: auto;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
     animation: logoFadeIn 1s ease-out;
@@ -474,7 +474,7 @@ html, body {
 
 @media (max-height: 600px) {
     #logo-img {
-        width: 130px;
+        width: 170px;
     }
 
     #logo-area {

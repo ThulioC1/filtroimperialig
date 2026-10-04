@@ -152,32 +152,6 @@ html, body {
     line-height: 1;
 }
 
-/* Filter Name Badge ("Sua Vez") */
-#filter-name {
-    margin-top: 14px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 18px;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-    animation: badgePulse 3s ease-in-out infinite;
-}
-
-@keyframes badgePulse {
-    0%, 100% { opacity: 0.85; }
-    50% { opacity: 1; }
-}
-
 /* ============================================
    Controls Bar
    ============================================ */

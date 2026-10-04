@@ -106,26 +106,54 @@
         flashOverlay.classList.add('flash');
         setTimeout(() => flashOverlay.classList.remove('flash'), 400);
 
-        // Set canvas to video dimensions for high quality
+        // Get the display (container) dimensions for portrait output
+        const container = document.getElementById('filter-container');
+        const displayW = container.clientWidth;
+        const displayH = container.clientHeight;
+        const displayAspect = displayW / displayH;
+
+        // Native video dimensions
         const vw = video.videoWidth;
         const vh = video.videoHeight;
-        canvas.width = vw;
-        canvas.height = vh;
+        const videoAspect = vw / vh;
 
-        // Draw the video frame (mirror if front camera)
+        // Calculate crop region to simulate object-fit: cover in portrait
+        let sx, sy, sw, sh;
+        if (videoAspect > displayAspect) {
+            // Video is wider than display — crop sides
+            sh = vh;
+            sw = vh * displayAspect;
+            sx = (vw - sw) / 2;
+            sy = 0;
+        } else {
+            // Video is taller than display — crop top/bottom
+            sw = vw;
+            sh = vw / displayAspect;
+            sx = 0;
+            sy = (vh - sh) / 2;
+        }
+
+        // Set canvas to portrait dimensions (use high-res output)
+        const outputScale = Math.min(2, vw / sw); // up to 2x for quality
+        const canvasW = Math.round(sw * outputScale);
+        const canvasH = Math.round(sh * outputScale);
+        canvas.width = canvasW;
+        canvas.height = canvasH;
+
+        // Draw the cropped video frame (mirror if front camera)
         ctx.save();
         if (currentFacingMode === 'user') {
-            ctx.translate(vw, 0);
+            ctx.translate(canvasW, 0);
             ctx.scale(-1, 1);
         }
-        ctx.drawImage(video, 0, 0, vw, vh);
+        ctx.drawImage(video, sx, sy, sw, sh, 0, 0, canvasW, canvasH);
         ctx.restore();
 
         // Draw logo on top
-        await drawLogoOnCanvas(vw, vh);
+        await drawLogoOnCanvas(canvasW, canvasH);
 
         // Draw date/time on bottom
-        drawDateTimeOnCanvas(vw, vh);
+        drawDateTimeOnCanvas(canvasW, canvasH);
 
         // Convert to blob
         canvas.toBlob((blob) => {
@@ -216,35 +244,6 @@
         ctx.letterSpacing = '3px';
         const timeY = dateY + timeFontSize * 0.75;
         ctx.fillText(timeStr, cw / 2, timeY);
-
-        // "Sua Vez" badge pill
-        ctx.shadowColor = 'transparent';
-        const badgeText = 'SUA VEZ';
-        const badgeFontSize = Math.round(cw * 0.028);
-        ctx.font = `600 ${badgeFontSize}px 'Outfit', sans-serif`;
-        const badgeMetrics = ctx.measureText(badgeText);
-        const badgePadX = cw * 0.035;
-        const badgePadY = cw * 0.015;
-        const badgeW = badgeMetrics.width + badgePadX * 2;
-        const badgeH = badgeFontSize + badgePadY * 2;
-        const badgeX = (cw - badgeW) / 2;
-        const badgeY = timeY + timeFontSize * 0.35;
-        const badgeR = badgeH / 2;
-
-        // Draw pill background
-        ctx.beginPath();
-        ctx.roundRect(badgeX, badgeY, badgeW, badgeH, badgeR);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        // Draw badge text
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(badgeText, cw / 2, badgeY + badgeH / 2);
 
         ctx.shadowColor = 'transparent';
     }

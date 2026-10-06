@@ -264,31 +264,30 @@
         const timestamp = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}`;
         const filename = `imperio_clinic_${timestamp}.jpg`;
 
-        // Verifica se a API de compartilhamento nativa (Web Share API) está disponível
-        // Isso resolve o problema no iPhone para abrir a opção de "Salvar Imagem" ou compartilhar direto no Instagram.
-        if (navigator.share && navigator.canShare) {
-            const file = new File([lastCapturedBlob], filename, { type: 'image/jpeg' });
-            if (navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Império Clinic',
-                        text: 'Confira minha foto!'
-                    });
-                    return; // Compartilhamento ou salvamento realizado com sucesso
-                } catch (err) {
-                    console.log('Compartilhamento cancelado ou falhou:', err);
-                    // Continua para o fallback padrão caso falhe
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+        if (isIOS) {
+            // No iPhone/iPad, usamos a Web Share API para a opção "Salvar Imagem" funcionar corretamente
+            if (navigator.share && navigator.canShare) {
+                const file = new File([lastCapturedBlob], filename, { type: 'image/jpeg' });
+                if (navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Império Clinic',
+                            text: 'Confira minha foto!'
+                        });
+                        return; // Sucesso
+                    } catch (err) {
+                        console.log('Compartilhamento cancelado ou falhou:', err);
+                    }
                 }
             }
-        }
-
-        // Fallback: Download padrão (no iPhone antigo pode ir para o app Arquivos)
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS) {
+            // Fallback para iOS se o Share falhar ou não existir
             alert("Dica: Se a foto não for para a Galeria, verifique o app 'Arquivos' ou pressione e segure a foto na tela de pré-visualização para salvar na Galeria.");
         }
 
+        // Para Android e Computadores, mantém o comportamento original de baixar direto
         const url = URL.createObjectURL(lastCapturedBlob);
         const a = document.createElement('a');
         a.href = url;
